@@ -169,7 +169,3 @@ Planned development includes:
 ## Disclaimer
 
 This project is under active development. Extraction results may vary depending on resume formatting, model capabilities, and the information provided. The current focus is structured resume information extraction; automated candidate ranking against job descriptions is a future development goal.
-
-## License
-
-No license has been specified yet. Add a `LICENSE` file before distributing the project under an open-source license.
