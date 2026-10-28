@@ -1,0 +1,5 @@
+# PDF, TXT and JSON of resumes
+
+*.pdf
+*.json
+*.txt
