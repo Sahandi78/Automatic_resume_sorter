@@ -73,7 +73,6 @@ class Resume(BaseModel):
     language_tests: list[LanguageTest] = Field(default_factory=list)
 
     honors_and_awards: list[str] = Field(default_factory=list)
-    exam_scores: list[str] = Field(default_factory=list)
 
 
 class CoreProfile(BaseModel):
@@ -83,15 +82,18 @@ class CoreProfile(BaseModel):
     summary: str | None = None
     education: list[Education] = Field(default_factory=list)
     experience: list[Experience] = Field(default_factory=list)
+    
+
+
+class TechnicalProfile(BaseModel):
+    skills: list[str] = Field(default_factory=list)
     projects: list[Projects] = Field(default_factory=list)
+    academic_courses: list[str] = Field(default_factory=list)
 
 
 class AdditionalQualifications(BaseModel):
-    skills: list[str] = Field(default_factory=list)
     publications: list[Publication] = Field(default_factory=list)
-    academic_courses: list[str] = Field(default_factory=list)
     certifications: list[str] = Field(default_factory=list)
     languages: list[str] = Field(default_factory=list)
     language_tests: list[LanguageTest] = Field(default_factory=list)
     honors_and_awards: list[str] = Field(default_factory=list)
-    exam_scores: list[str] = Field(default_factory=list)
