@@ -90,7 +90,9 @@ Resume text:
         model=MODEL_NAME,
         messages=[{"role": "user", "content": prompt}],
         format=Resume.model_json_schema(),
-        options={"temperature": 0},
+        options={
+            "temperature": 0,
+            },
     )
     
     print(response)
