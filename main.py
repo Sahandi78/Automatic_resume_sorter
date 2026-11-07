@@ -1,9 +1,10 @@
-
 import json
 from pathlib import Path
+import os
 
 from resume_reader import extract_resume_text
 from resume_parser import create_resume_json
+from llm_score import scorer
 
 
 INPUT_DIR = Path("input_resumes")
@@ -11,6 +12,8 @@ TEXT_OUTPUT_DIR = Path("extracted_text")
 JSON_OUTPUT_DIR = Path("candidate_json")
 
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
+
+REQUIREMENT_FILE = Path("job_require.json")
 
 
 def main():
@@ -58,9 +61,7 @@ def main():
             candidate_data = create_resume_json(text)
 
             # Step 4: Save the candidate JSON.
-            json_output_path = (
-                JSON_OUTPUT_DIR / f"{file_path.stem}.json"
-            )
+            json_output_path = (JSON_OUTPUT_DIR / f"{file_path.stem}.json")
             json_output_path.write_text(
                 json.dumps(
                     candidate_data,
@@ -79,8 +80,13 @@ def main():
 
     print("\n========== Processing Summary ==========")
     print(f"Total resumes: {len(resume_files)}")
-    print(f"Successful:    {successful}")
-    print(f"Failed:        {failed}")
+    print(f"Successful json output:    {successful}")
+    print(f"Failed json creation:        {failed}")
+    
+    
+    print("\n\n=========== NEXT STEP ===========")
+    print("Scoring each resume: ")
+    scorer(JSON_OUTPUT_DIR, os.getcwd())
 
 
 if __name__ == "__main__":

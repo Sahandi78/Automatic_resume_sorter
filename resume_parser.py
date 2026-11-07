@@ -95,7 +95,6 @@ Resume text:
             },
     )
     
-    print(response)
     
     data = json.loads(response.message.content)
     return Resume.model_validate(data).model_dump()
