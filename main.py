@@ -5,6 +5,7 @@ import os
 from resume_reader import extract_resume_text
 from resume_parser import create_resume_json
 from llm_score import scorer
+from sorter import sorter_func
 
 
 INPUT_DIR = Path("input_resumes")
@@ -14,6 +15,13 @@ JSON_OUTPUT_DIR = Path("candidate_json")
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 
 REQUIREMENT_FILE = Path("job_require.json")
+
+
+sorted_candidates = []
+
+scores_dir = os.path.join(os.getcwd(), "candidate_score")
+os.makedirs("sorted_candidates", exist_ok=True)
+sorted_result_dir = os.path.join(os.getcwd(), "sorted_candidates")
 
 
 def main():
@@ -87,6 +95,11 @@ def main():
     print("\n\n=========== NEXT STEP ===========")
     print("Scoring each resume: ")
     scorer(JSON_OUTPUT_DIR, os.getcwd())
+    
+    
+    print("\n\n=========== NEXT STEP ===========")
+    print("Sorting resumes based on scores: ")
+    sorter_func(scores_dir, sorted_result_dir, sorted_candidates)
 
 
 if __name__ == "__main__":
