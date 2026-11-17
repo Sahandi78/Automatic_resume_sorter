@@ -4,7 +4,7 @@ A Python-based project for automatically extracting, structuring, and preparing 
 
 The long-term goal is to build a system that can evaluate resumes against a job description and rank candidates according to their relevance.
 
-## Current Features
+## Current Features (Version 1)
 
 ### 1. Resume Text Extraction
 
@@ -42,7 +42,19 @@ The extraction process is divided into two stages:
 
 The second extraction stage also receives the previously extracted core profile to help maintain consistency and reduce classification errors.
 
-### 3. Structured JSON Output
+### 3. LLM-based scoring
+
+Use an other locally running Ollama model to create a scores file for each resume.
+
+This file is created based on a specific prompt and for a specific job description in that prompt.
+
+The LLM is scoring each candidate based on how good they fit in the position and the related experiences.
+
+### 4. Rule-based sorting
+
+A rule-based sorting logic is applied to sort the resumes from best to worse based on what LLMs have provided.
+
+### 5. Structured JSON Output
 
 Uses Pydantic models to define the expected data structure and validate the extracted information.
 
@@ -51,11 +63,13 @@ Uses Pydantic models to define the expected data structure and validate the extr
 - Represents missing information using appropriate empty lists or `null` values, according to the schema.
 - Applies post-processing rules, including adding English to the language list when an IELTS or TOEFL result is identified.
 
-### 4. Local LLM Inference
+### 6. Local LLM Inference
 
 Uses Ollama to run language models locally rather than relying on a cloud-based LLM API.
 
-The current parser configuration uses `gemma3:4b`. Other compatible Ollama models can be tested by changing the configured model name.
+The current parser configuration uses `gemma3:4b` and scoring function uses `qwen2.5:3b`.
+
+Other compatible Ollama models can be tested by changing the configured model name.
 
 ## Project Structure
 
@@ -65,10 +79,19 @@ Automatic_resume_sorter/
 │   └── ...                 # Input resumes
 ├── extracted_text/
 │   └── ...                 # Extracted resume text
+├── candidate_json/
+│   └── ...                 # JSON files created by parser LLM
+├── candidate_score/
+│   └── ...                 # JSON file containing the scores at evey section for each candidate
+├── sorted_candidates/
+│   └── ...                 # Final CSV which contains the sorted results
 ├── main.py                 # Main application workflow
 ├── resume_reader.py        # Resume text extraction
 ├── resume_parser.py        # LLM-based information extraction
 ├── resume_schema.py        # Pydantic data models
+├── job_related.py          # Job requirement JSON creation
+├── llm_score.pt            # LLM based scoring of each candidate JSON
+├── sorter.py               # Rule-based sorting
 ├── README.md
 └── .gitignore
 ```
@@ -146,16 +169,6 @@ The parser is designed to prioritize accuracy and avoid inventing information.
 
 Because LLM extraction is not perfectly reliable, generated JSON should be reviewed before being used for consequential recruitment decisions.
 
-## Roadmap
-
-Planned development includes:
-
-- [ ] Improve extraction accuracy across different resume formats and layouts.
-- [ ] Refine JSON schemas and validation rules.
-- [ ] Optimize inference time when processing multiple resumes.
-- [ ] Build a job-description-based candidate evaluation system.
-- [ ] Rank resumes according to their relevance to a given job description.
-- [ ] Evaluate extraction quality and ranking performance on representative test cases.
 
 ## Technologies
 
@@ -166,6 +179,8 @@ Planned development includes:
 - **PyMuPDF4LLM** — PDF text extraction and Markdown conversion
 - **python-docx** — Microsoft Word document processing
 
-## Disclaimer
+## Important note
+
+To get better results use more powerful LLMs.
 
 This project is under active development. Extraction results may vary depending on resume formatting, model capabilities, and the information provided. The current focus is structured resume information extraction; automated candidate ranking against job descriptions is a future development goal.
